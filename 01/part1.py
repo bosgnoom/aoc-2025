@@ -25,6 +25,13 @@ def read_input(filename: Path) -> list:
 def calc_pos(old_pos: int, instruction: str) -> tuple[int, int]:
     """Calculate new position of dial and amount of clicks
 
+    It's a dial, so goes round and round... Gives the opportunity to
+    use the modulo operator. Based on the direction it's either adding
+    or subtracting the distance from the current position.
+    The final position is calculated modulo 100.
+    
+    0 is special, as it counts as a click.
+
     :param old_pos: current dial position
     :type old_pos: int
     :param instruction: instruction, like R17

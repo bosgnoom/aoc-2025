@@ -10,6 +10,17 @@ logger = logging.getLogger(__name__)
 def calc_pos(old_pos: int, instruction: str) -> tuple[int, int]:
     """Calculate new position of dial and amount of clicks
 
+    It's a dial, so goes round and round... Gives the opportunity to
+    use the modulo operator. Based on the direction it's either adding
+    or subtracting the distance from the current position.
+    The final position is calculated modulo 100.
+    
+    The amount of clicks is calculated by counting how many times
+    the dial passes position 0. For positive rotations, this is done by
+    integer division of the new position by 100. For negative rotations,
+    it's a bit more complex: we first calculate how far we are from 100,
+    then add the distance, and do integer division by 100.
+
     :param old_pos: current dial position
     :type old_pos: int
     :param instruction: instruction, like R17
