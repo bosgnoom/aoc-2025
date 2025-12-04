@@ -7,8 +7,8 @@ coloredlogs.install(level='INFO')
 logger = logging.getLogger(__name__)
 
 # Screen settings
-SCALE = 8
-FPS = 10
+SCALE = 12
+FPS = 5
 
 
 def read_input(filename: Path) -> list:
@@ -45,7 +45,7 @@ def draw_map(screen: pygame.Surface, font: pygame.font.Font, grid: list) -> None
     """
 
     # Clear screen
-    screen.fill((0, 0, 0))
+    screen.fill((10, 20, 10))
 
     # Fill screen again, iterating over grid
     for i, line in enumerate(grid):
@@ -53,9 +53,11 @@ def draw_map(screen: pygame.Surface, font: pygame.font.Font, grid: list) -> None
 
             # "Fancy" coloring here
             if c == '@':
-                color = (127, 255, 127)
+                color = (32, 255, 63)
+            elif c == 'x':
+                color = (127, 255, 63)
             else:
-                color = (64, 127, 64)
+                color = (15, 192, 63)
 
             text = font.render(c, True, color)
             screen.blit(text, (SCALE * ii, SCALE * i))
@@ -152,6 +154,15 @@ def main(puzzle: list) -> int:
     # Loop untill nothing can be removed
     while len(to_be_removed := count_neighbours(puzzle)) > 0:
 
+        # For game animation: show which rolls are to be removed
+        for x, y in to_be_removed:
+            puzzle[y][x] = "x"
+
+        # Update screen
+        draw_map(screen, font, puzzle)
+        pygame.display.flip()
+        timert.tick(FPS)
+
         # Clear out rolls which can be removed
         for x, y in to_be_removed:
             puzzle[y][x] = "."
@@ -162,8 +173,6 @@ def main(puzzle: list) -> int:
 
         # Draw map on screen
         draw_map(screen, font, puzzle)
-
-        # Update display
         pygame.display.flip()
         timert.tick(FPS)
 
@@ -171,7 +180,7 @@ def main(puzzle: list) -> int:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                exit()
+                exit(-1)
 
     # Close pygame window
     pygame.quit()
