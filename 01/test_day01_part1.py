@@ -1,5 +1,6 @@
 from day01 import calc_pos, main, read_input
 from pathlib import Path
+import pytest
 
 
 def test_R8():
@@ -18,6 +19,11 @@ def test_L10():
 
     pos, _ = calc_pos(pos, "R5")
     assert pos == 0
+
+
+def test_instruction_not_defined():
+    with pytest.raises(NotImplementedError):
+        calc_pos(0, "X10")
 
 
 def test_sample1():

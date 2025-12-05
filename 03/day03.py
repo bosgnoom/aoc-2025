@@ -104,7 +104,7 @@ def main(puzzle: list, part: int) -> int:
     return sum(joltages)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     puzzle = read_input(Path("03/input.txt"))
     logger.info(f'Total part 1: {main(puzzle, 1)}')
     logger.info(f'Total part 2: {main(puzzle, 2)}')

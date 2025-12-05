@@ -123,7 +123,7 @@ def main(puzzle: list, part: int) -> int:
     return total_clicks
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     puzzle = read_input(Path("01/input.txt"))
     main(puzzle, 1)
     main(puzzle, 2)

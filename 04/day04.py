@@ -121,7 +121,7 @@ def count_neighbours(puzzle: list) -> set:
     return accessable
 
 
-def main(puzzle: list) -> int:
+def main(puzzle: list, SHOW: bool = True) -> int:
     """Main loop for puzzle
 
     Uses pygame for funsies
@@ -130,38 +130,41 @@ def main(puzzle: list) -> int:
 
     :param puzzle: Puzzle map
     :type puzzle: list
+    :param SHOW: Whether to show pygame window
+    :type SHOW: bool
     :return: Amount of rolls removed in total
     :rtype: int
     """
     # Set up pygame
-    pygame.init()
-    pygame.font.init()
-    timert = pygame.time.Clock()
-    font = pygame.font.SysFont('freemono', size=SCALE)
-    size_x = SCALE * len(puzzle[0])
-    size_y = SCALE * len(puzzle)
-    screen = pygame.display.set_mode([size_x, size_y])
+    if SHOW:  # pragma: no cover
+        pygame.init()
+        pygame.font.init()
+        timert = pygame.time.Clock()
+        font = pygame.font.SysFont('freemono', size=SCALE)
+        size_x = SCALE * len(puzzle[0])
+        size_y = SCALE * len(puzzle)
+        screen = pygame.display.set_mode([size_x, size_y])
 
-    # Draw map on screen
-    draw_map(screen, font, puzzle)
+        # Draw map on screen
+        draw_map(screen, font, puzzle)
 
-    # Update display
-    pygame.display.flip()
+        # Update display
+        pygame.display.flip()
 
     # Count how many rolls are removed
     total_removed = 0
 
     # Loop untill nothing can be removed
     while len(to_be_removed := count_neighbours(puzzle)) > 0:
+        if SHOW:  # pragma: no cover
+            # For game animation: show which rolls are to be removed
+            for x, y in to_be_removed:
+                puzzle[y][x] = "x"
 
-        # For game animation: show which rolls are to be removed
-        for x, y in to_be_removed:
-            puzzle[y][x] = "x"
-
-        # Update screen
-        draw_map(screen, font, puzzle)
-        pygame.display.flip()
-        timert.tick(FPS)
+            # Update screen
+            draw_map(screen, font, puzzle)
+            pygame.display.flip()
+            timert.tick(FPS)
 
         # Clear out rolls which can be removed
         for x, y in to_be_removed:
@@ -171,24 +174,26 @@ def main(puzzle: list) -> int:
         total_removed += len(to_be_removed)
         logger.info(f'Amount rolls removed: {len(to_be_removed)}, {total_removed=}')
 
-        # Draw map on screen
-        draw_map(screen, font, puzzle)
-        pygame.display.flip()
-        timert.tick(FPS)
+        if SHOW:  # pragma: no cover
+            # Draw map on screen
+            draw_map(screen, font, puzzle)
+            pygame.display.flip()
+            timert.tick(FPS)
 
-        # Check if pygame wants to quit
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit(-1)
+            # Check if pygame wants to quit
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit(-1)
 
     # Close pygame window
-    pygame.quit()
+    if SHOW:  # pragma: no cover
+        pygame.quit()
 
     return total_removed
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     # puzzle = read_input(Path("04/sample01.txt"))
     puzzle = read_input(Path("04/input.txt"))
 
